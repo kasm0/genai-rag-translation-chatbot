@@ -1,139 +1,119 @@
-🗣️ RAG Destekli Türkçe ↔ İngilizce Çeviri Chatbotu
+# 🗣️ RAG Destekli Türkçe ↔ İngilizce Çeviri Chatbotu
 
-Bu proje, Akbank GenAI Bootcamp kapsamında geliştirilmiş, Retrieval Augmented Generation (RAG) mimarisi üzerine kurulu bir çeviri chatbotudur. Amacı, zengin çeviri örneklerini (Context) kullanarak kullanıcının girdiği cümleleri Türkçe'den İngilizce'ye veya İngilizce'den Türkçe'ye yüksek doğrulukla çevirmektir.
+Bu proje, **Akbank GenAI Bootcamp** kapsamında geliştirilmiş, **Retrieval Augmented Generation (RAG)** mimarisi üzerine kurulu bir **çift yönlü (Türkçe ↔ İngilizce)** çeviri chatbotudur.  
+Amaç, zengin çeviri örneklerini (context) kullanarak kullanıcının girdiği cümleleri yüksek doğrulukla çevirmektir.
 
-1. 🎯 Projenin Amacı
+---
 
-Projenin temel amacı, dil modellerinin (LLM) genel çeviri yeteneklerini, spesifik çeviri çiftlerini içeren bir vektör veritabanı ile güçlendirmektir. Bu RAG yaklaşımı sayesinde, model sadece genel bilgiye dayanmak yerine, eğitildiği çeviri örneklerini referans alarak daha bağlamsal ve tutarlı çeviriler üretir.
+## 🎯 1. Projenin Amacı
 
-2. 📊 Veri Seti Hakkında Bilgi
+Projenin temel amacı, dil modellerinin (LLM) genel çeviri yeteneklerini, spesifik çeviri çiftlerini içeren bir **vektör veritabanı** ile güçlendirmektir.  
+Bu **RAG yaklaşımı** sayesinde model, sadece genel bilgiye dayanmak yerine, eğitildiği çeviri örneklerini referans alarak **daha bağlamsal ve tutarlı çeviriler** üretir.
 
-Bu projede, Türkçe ve İngilizce karşılıklı cümle çiftlerini içeren bir çeviri veri seti kullanılmıştır.
+---
 
-Veri Kaynağı: Kaggle veya benzeri platformlardan (Örn: Helsinki-NLP OPUS-Tatoeba serisinden) türetilen bir İngilizce-Türkçe çeviri çiftleri seti.
+## 📊 2. Veri Seti Hakkında Bilgi
 
-İçerik: Her bir satır, bir İngilizce cümle ve onun karşılığı olan Türkçe cümleyi içerir (Örn: "I am hungry" | "Açım").
+**Veri Kaynağı:** Kaggle veya benzeri platformlardan (örn: *Helsinki-NLP OPUS-Tatoeba* serisi).  
+**İçerik:** Her satır bir İngilizce cümle ve karşılığı olan Türkçe cümleyi içerir.  
+> Örnek: `"I am hungry" | "Açım"`
 
-Hazırlık Metodolojisi: Veri setindeki cümleler, LangChain Text Splitters kullanılarak işlenmiş ve Google GenerativeAIEmbeddings (models/text-embedding-004) ile vektörlere dönüştürülerek ChromaDB'ye kaydedilmiştir.
+**Hazırlık Süreci:**
+- Cümle çiftleri **LangChain Text Splitters** ile işlenmiştir.  
+- Ardından, **Google GenerativeAIEmbeddings (models/text-embedding-004)** ile vektörlere dönüştürülmüştür.  
+- Bu vektörler **ChromaDB** içerisinde depolanmıştır.
 
-3. ⚙️ Kullanılan Yöntemler ve Çözüm Mimarisi
+---
 
-Çözüm mimarisi, yüksek performanslı ve çift yönlü çeviri yapabilmek için gelişmiş bir RAG zinciri üzerine kurulmuştur:
+## ⚙️ 3. Kullanılan Yöntemler ve Mimarî
 
-Bileşen
+Sistem, yüksek performanslı ve çift yönlü çeviri için gelişmiş bir **RAG zinciri (Retrieval + Generation)** üzerine kuruludur.
 
-Teknoloji
+| Bileşen                    | Teknoloji                   | Görev |
+| **Büyük Dil Modeli (LLM)** | Gemini 2.5 Flash            | Çeviri üretimi ve akıl yürütme |
+| **Embedding Modeli**       | Google `text-embedding-004` | Veri setindeki cümleleri vektör uzayına dönüştürme |
+| **Vektör Veritabanı**      | ChromaDB                    | Vektörlerin depolanması ve arama işlemi |
+| **RAG Çerçevesi**          | LangChain                   | Zinciri yönetme ve prompt oluşturma |
+| **Arayüz**                 | Streamlit                   | Web tabanlı kullanıcı arayüzü sunumu |
 
-Görev
+---
 
-Büyük Dil Modeli (LLM)
+### 🔍 Pre-Retrieval Translation (Geri Çekme Öncesi Çeviri)
 
-Gemini 2.5 Flash
+Bu teknik, Türkçe sorguların İngilizce vektör veritabanında doğru aranmasını sağlar:
 
-Çeviri Üretimi (Generation) ve akıl yürütme.
+1. **Kullanıcı Sorgusu (Türkçe)** → “Günaydın”
+2. **Mini LLM (Gemini 2.5 Flash)** → İngilizceye çevrilir: “Good morning”
+3. **Retrieval:** İngilizce sorgu ChromaDB’de aranır.
+4. **Generation:** Bulunan bağlam ve orijinal sorgu, ana LLM’e gönderilerek hedef dile çeviri yapılır.
 
-Embedding Modeli
+Bu sayede, **alaka düzeyi (relevance)** maksimuma çıkar.
 
-Google (text-embedding-004)
+---
 
-Veri setindeki cümleleri vektör uzayına dönüştürme.
+## 🚀 4. Elde Edilen Sonuçlar
 
-Vektör Veritabanı
+✅ **Yüksek Alaka Düzeyi:** Pre-Retrieval Translation sayesinde Türkçe sorgular bile İngilizce vektörler arasında doğru şekilde eşleşmiştir.  
+✅ **Temiz Çıktı:** Optimize edilmiş prompt template’leri sayesinde model yalnızca çeviriyi döndürür.  
+✅ **Çift Yönlü Çeviri:** Tek arayüzle hem Türkçe → İngilizce hem İngilizce → Türkçe çeviri yapılabilir.
 
-ChromaDB
+---
 
-Vektörlerin depolanması ve arama (Retrieval) işlemi.
+## 🛠️ 5. Kurulum ve Çalıştırma Kılavuzu
 
-RAG Çerçevesi
+### 🔧 Ön Gereklilikler
 
-LangChain
+- Python 3.9+
+- VS Code veya benzeri bir IDE
+- `.env` dosyasında `GEMINI_API_KEY`
+- Eğer Kaggle verisi kullanıyorsanız, `kaggle.json` dosyasını `rag_setup.py` ile aynı klasöre ekleyin.
 
-Tüm zinciri yönetme ve Prompt oluşturma.
+---
 
-Arayüz
+### 💻 Kurulum Adımları
 
-Streamlit
-
-Web tabanlı kullanıcı arayüzü sunumu.
-
-Çözüm Mimarisi Detayları: Pre-Retrieval Translation
-
-Proje, özellikle Türkçe sorguların Vektör Veritabanında (İngilizce cümlelerden oluşan) doğru bir şekilde aranabilmesi için Pre-Retrieval Translation (Geri Çekme Öncesi Çeviri) tekniğini kullanır:
-
-Kullanıcı Sorgusu (Türkçe): Kullanıcı, Türkçe bir cümle girer.
-
-Mini LLM (Gemini 2.5 Flash): Bu sorgu, ana RAG zincirine girmeden önce ayrı bir Mini LLM (hızlı çevirmen) tarafından İngilizce'ye çevrilir. (Örn: "Günaydın" -> "Good morning")
-
-Arama (Retrieval): İngilizceye çevrilmiş sorgu, Vektör DB'de arama yapmak için kullanılır. Bu, alaka düzeyini (relevance) maksimize eder.
-
-Üretim (Generation): Arama sonucu bulunan bağlam (context) ve kullanıcının orijinal (Türkçe veya İngilizce) sorusu, ana Gemini LLM'e gönderilir. LLM, orijinal soruya bakarak doğru hedef dile çeviriyi yapar.
-
-4. 🚀 Elde Edilen Sonuçlar
-
-Yüksek Alaka Düzeyi: Pre-Retrieval Translation sayesinde, Türkçe sorgular bile İngilizce vektörler arasında yüksek doğrulukla aranabilmektedir.
-
-Temiz Çıktı: Prompt Template optimizasyonu sayesinde LLM, gereksiz hata mesajları olmadan (Örn: "Sorry, I could not find...") sadece çeviriyi döndürmektedir.
-
-Çift Yönlü Çeviri: Tek bir arayüz ve mimari ile hem Türkçe-İngilizce hem de İngilizce-Türkçe çeviriler başarılı bir şekilde gerçekleştirilmiştir.
-
-5. 🛠️ Kodunuzun Çalışma Kılavuzu (Lokal Ortam İçin)
-
-Projenin yerel bilgisayarınızda (Windows veya Mac/Linux) çalıştırılması için aşağıdaki adımları takip ediniz:
-
-Ön Gereklilikler
-
-Python 3.9+
-
-VS Code veya tercih edilen IDE.
-
-Hassas Dosyalar:
-
-GEMINI_API_KEY'inizin bulunduğu bir .env dosyası.
-
-Kaggle veri setini kullanıyorsanız, kaggle.json dosyasını rag_setup.py ile aynı klasöre yerleştirin.
-
-Kurulum Adımları
-
-Git Klonlama ve Klasöre Girme:
-
-git clone [https://github.com/KullaniciAdiniz/genai-rag-translation-chatbot.git](https://github.com/KullaniciAdiniz/genai-rag-translation-chatbot.git)
+**1️⃣ Depoyu Klonlayın ve Klasöre Girin**
+```bash
+git clone https://github.com/KullaniciAdiniz/genai-rag-translation-chatbot.git
 cd genai-rag-translation-chatbot
-
-
-Sanal Ortam Kurulumu (venv):
+2️⃣ Sanal Ortam (venv) Kurun
 
 python -m venv venv
 
 
-Sanal Ortamı Aktif Etme:
+3️⃣ Sanal Ortamı Aktif Edin
 
-Windows (PowerShell): .\venv\Scripts\Activate.ps1
+# Windows
+.\venv\Scripts\Activate.ps1
 
-Mac/Linux: source venv/bin/activate
+# Mac/Linux
+source venv/bin/activate
 
-Bağımlılıkları Yükleme:
+
+4️⃣ Bağımlılıkları Yükleyin
 
 pip install -r requirements.txt
 
 
-Vektör Veritabanını Oluşturma (Sadece Bir Kez):
+5️⃣ Vektör Veritabanını Oluşturun (Bir Kez)
 
 python rag_setup.py
 
 
-Bu komut, veriyi indirir, işler ve ./chroma_db_translation klasörünü oluşturur.
+Bu adım sonunda ./chroma_db_translation klasörü oluşacaktır.
 
-Uygulamayı Başlatma:
+6️⃣ Uygulamayı Başlatın
 
 streamlit run app.py
 
 
-Uygulama tarayıcınızda açılacaktır (genellikle http://localhost:8501).
+Uygulama otomatik olarak tarayıcıda açılır:
+👉 http://localhost:8501
 
-6. 🌐 Web Arayüzü & Deploy Linki
+🌐 6. Web Arayüzü & Deploy Linki
 
-Projenin canlı ve çalışan versiyonuna aşağıdaki linkten ulaşabilirsiniz.
+Projenin canlı versiyonuna aşağıdaki linkten ulaşabilirsiniz:
 
-[CANLI UYGULAMA LİNKİ BURAYA EKLENECEK]
+🔗 [CANLI UYGULAMA LİNKİ BURAYA EKLENECEK]
 
-NOT: Bu linki, Streamlit Cloud'a deploy ettikten sonra almayı unutmayın. Linki ekledikten sonra, README.md dosyasını son kez GitHub'a yükleyiniz.
+⚠️ Not: Streamlit Cloud’a deploy ettikten sonra bu linki ekleyip README.md dosyasını güncellemeyi unutmayın.
