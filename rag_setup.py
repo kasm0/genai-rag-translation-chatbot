@@ -1,18 +1,21 @@
 import os
 import kagglehub
-from dotenv import load_dotenv
+# from dotenv import load_dotenv <-- Bu satırı siliyoruz!
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # ----------------------------------------------------
-# 1️⃣ Ortam değişkenlerini yükle (.env içinde GEMINI_API_KEY olmalı)
+# 1️⃣ Ortam değişkenlerini doğrudan OS'tan al (Streamlit Secrets'ı kullan)
 # ----------------------------------------------------
-load_dotenv()
+# load_dotenv() <-- Bu satır silindi!
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
+# ⚠️ UYARI: Streamlit Secrets'ta KAGGLE_USERNAME ve KAGGLE_KEY tanımlı olmalıdır.
+# kagglehub, bu ortam değişkenlerini otomatik olarak kullanır.
+
 if not GEMINI_API_KEY:
-    raise ValueError("❌ GEMINI_API_KEY bulunamadı. Lütfen .env dosyasına ekleyin.")
+    raise ValueError("❌ GEMINI_API_KEY bulunamadı. Lütfen Streamlit Secrets'a ekleyin.")
 
 # ----------------------------------------------------
 # 2️⃣ Kaggle dataset indir
