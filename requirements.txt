@@ -1,10 +1,16 @@
+google-genai # Yeni model entegrasyonları için eklendi
+
 streamlit
 langchain-core
 langchain-community
 langchain-text-splitters
+langchain-google-genai # Langchain'in Gemini entegrasyonu (tireli hali)
 chromadb
-google-genai
 python-dotenv
-kagglehub
-# Veri işleme
+kagglehub # Veri çekme için
+
+
+
 pandas
+numpy
+unidecode
