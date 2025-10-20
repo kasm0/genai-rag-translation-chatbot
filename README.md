@@ -1,4 +1,4 @@
-# 🗣 RAG Destekli Türkçe ↔ İngilizce Çeviri Chatbotu (Gemini)
+# 🗣 RAG Destekli Türkçe ↔ İngilizce Çeviri Chatbotu 
 
 Bu proje, *Akbank GenAI Bootcamp* kapsamında geliştirilmiş, *Retrieval Augmented Generation (RAG)* mimarisi üzerine kurulu bir *çift yönlü (Türkçe ↔ İngilizce)* çeviri chatbotudur.  
 Amaç, zengin çeviri örneklerini (context) kullanarak kullanıcının girdiği cümleleri yüksek doğrulukla ve bağlamsal tutarlılıkla çevirmektir.
