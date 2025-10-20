@@ -1,0 +1,14 @@
+# Local data (Vektor DB)
+chroma_db_translation/
+
+# Virtual Environment
+venv/
+.venv/
+
+# Environment variables
+.env
+kaggle.json
+
+# Python artifacts
+__pycache__/
+*.pyc
