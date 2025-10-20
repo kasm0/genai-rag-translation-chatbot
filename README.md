@@ -114,4 +114,4 @@ Uygulama otomatik olarak tarayıcıda açılır:
 
 Projenin canlı versiyonuna aşağıdaki linkten ulaşabilirsiniz:
 
-🔗 [CANLI UYGULAMA LİNKİ BURAYA EKLENECEK]
+🔗 [https://3edkzbyaon5nuxwvnsjahl.streamlit.app/]
