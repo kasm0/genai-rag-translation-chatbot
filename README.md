@@ -115,5 +115,3 @@ Uygulama otomatik olarak tarayıcıda açılır:
 Projenin canlı versiyonuna aşağıdaki linkten ulaşabilirsiniz:
 
 🔗 [CANLI UYGULAMA LİNKİ BURAYA EKLENECEK]
-
-⚠️ Not: Streamlit Cloud’a deploy ettikten sonra bu linki ekleyip README.md dosyasını güncellemeyi unutmayın.
